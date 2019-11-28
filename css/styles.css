@@ -238,6 +238,14 @@ section.activesection {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
+
+/*made active section header red to differntiate it from other sections*/
+
+section.activesection h2 {
+    color: red;
+    font-family: Arial;
+}
+
 section.activesection .landing__container::before {
     opacity: 1;
     animation: rotate 4s linear 0s infinite forwards;
