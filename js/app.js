@@ -1,13 +1,25 @@
 (function() {
-    // Build menu 
-
+    /* 
+        load y values of all sections
+    */
+    const secpos = [];
+    const secs = document.querySelectorAll('section');
+    for (let i = 0; i < secs.length; i++) {
+        const name = secs[i].attributes['data-nav'].value;
+        const top = secs[i].getBoundingClientRect().top;
+        const doctop = document.body.getBoundingClientRect().top;
+        secpos.push({
+            name: name,
+            y: top - doctop
+        });
+    }
     //array of navbar list items to be used to populate the nav unorder list
     // data-nav="Section 1"
 
     /*
         makeactive event handler used to handle click event to the list item 
     */
-    const makeactive = function(el) {
+    const makeactive = function(el, move) {
         const lists = document.querySelectorAll('#navbar__list li');
         //remove all class activenav to the list items in nav
         for (let i = 0; i < lists.length; i++) {
@@ -25,15 +37,18 @@
         const listsofsecs = document.querySelectorAll("section");
         listsofsecs.forEach(x => {
             x.classList.remove('activesection');
-
             if (x.attributes['data-nav'].value === el) {
                 x.classList.add('activesection');
-                const bodyRect = document.body.getBoundingClientRect();
-                elemRect = x.getBoundingClientRect();
-                const offset = elemRect.top - bodyRect.top;
+                if (move !== false) { //don't need to change the scroll position if it is a scroll event
 
-                scrollTo(0, offset)
+                    const bodyRect = document.body.getBoundingClientRect();
+                    elemRect = x.getBoundingClientRect();
+                    const offset = elemRect.top - bodyRect.top;
+
+                    scrollTo(0, offset)
+                }
             }
+
         });
         //add the activenav class to the clicked on list item 
 
@@ -57,6 +72,22 @@
         });
         navbarlist.appendChild(li);
     }
+    /* add logic for making the window automatically change 
+    the active section on window scroll */
+    window.addEventListener('scroll', function(e) {
+        for (var i = secpos.length - 1; i >= 0; i--) {
+            if (window.scrollY > secpos[i].y) {
+                //only call makeactive it is changing the activesection
+                const prevsection = this.document.querySelector("section.activesection").attributes["data-nav"].value
+                if (prevsection === secpos[i].name) {
+                    break;
+                }
+                makeactive(secpos[i].name, false);
+                break;
+            }
+        }
 
+
+    });
 
 })();
