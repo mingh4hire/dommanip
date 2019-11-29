@@ -75,8 +75,9 @@
     /* add logic for making the window automatically change 
     the active section on window scroll */
     window.addEventListener('scroll', function(e) {
+        const offset = 15;
         for (var i = secpos.length - 1; i >= 0; i--) {
-            if (window.scrollY > secpos[i].y) {
+            if (window.scrollY > secpos[i].y - offset) {
                 //only call makeactive it is changing the activesection
                 const prevsection = this.document.querySelector("section.activesection").attributes["data-nav"].value
                 if (prevsection === secpos[i].name) {
